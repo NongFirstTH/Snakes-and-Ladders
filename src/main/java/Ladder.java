@@ -1,8 +1,10 @@
 public class Ladder implements ObjectInterface{
+    private String name;
     private int [] head = new int[2];
     private int [] tail = new int[2];
 
-    public Ladder(int [] head,int [] tail) {
+    public Ladder(String name,int [] head,int [] tail) {
+        this.name = name;
         this.head = head;
         this.tail = tail;
     }
@@ -13,5 +15,9 @@ public class Ladder implements ObjectInterface{
     
     public int [] tail(){
         return tail;
+    }
+
+    public String name(){
+        return name;
     }
 }

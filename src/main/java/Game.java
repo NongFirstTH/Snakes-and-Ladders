@@ -13,11 +13,22 @@ public class Game {
 
     public void play(){
         Player p = board.players.peek();
-        move(p,p.RollDice());
+        int roll = p.RollDice();
+        System.out.println(p.color + " roll " + roll);
+        printBoard();
+        move(p,roll);
+        System.out.println(p.color +" pos = "+ p.position +" r:"+ p.currow+" c:" + p.curcol);
         checkWinner();
         turn();
     }
 
+    private int calPosition(int row,int col){
+        int position = 1;
+        if(row%2 == 0) position = (n-1-row)*10 + n-col;
+        else position = (n-1-row)*10 + col+1;
+
+        return position;
+    }
     public void move(Player p,int rollDice){
         p.setPosition(p.position + rollDice,n);
         int row = p.currow;
@@ -30,10 +41,10 @@ public class Game {
                 return ;
             }else if(board.getBoard()[row][col].equals(checkLadderHead(row,col))){
                 Ladder l = (Ladder) board.getBoard()[row][col];
-                p.setPosition(l.tail()[1]+n-l.tail()[0]+p.position,n);
+                p.setPosition(calPosition(l.tail()[0], l.tail()[1]), n);
             }else if(board.getBoard()[row][col].equals(checkSnakeHead(row,col))){
                 Snake s = (Snake) board.getBoard()[row][col];
-                p.setPosition(s.tail()[1]+n-s.tail()[0],n);
+                p.setPosition(calPosition(row, col), n);
             }
     }
 
@@ -70,7 +81,26 @@ public class Game {
     }
 
     public void printBoard(){
-
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<n;j++){
+                boolean hasPlayer = false;
+                    for(Player p : board.players){
+                        if(i == p.currow && j == p.curcol){
+                            System.out.printf("%-10s",p.color);
+                            hasPlayer = true;
+                        }
+                    }
+                if(!hasPlayer) {
+                    if(board.getBoard()[i][j] == null) System.out.printf("%-10s",calPosition(i,j));
+                }
+                    if(board.getBoard()[i][j] instanceof Ladder l){
+                        System.out.printf("%-10s",l.name());
+                    }else if(board.getBoard()[i][j] instanceof Snake s){
+                        System.out.printf("%-10s",s.name());
+                    }
+            }
+            System.out.println();
+        }
     }
 
 }

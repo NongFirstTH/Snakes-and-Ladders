@@ -14,17 +14,18 @@ public class Player{
         this.position = pos;
 
         if(position >= n*n) currow = 0;
-        else currow = n-1 - (position/n);
+        else currow = n-1 - ((position-1)/n);
 
         if(position >= n*n) {
             curcol = 0;
-        } else if(currow % 2 == 0){
-            curcol = n - (pos%n);
+        } else if((position / n)%2 == 1){
+                if(position%n==0) curcol = 0;
+                else curcol = n - (pos%n);
         }else{
             if(currow == n-1){
                 curcol = Math.abs(position-n+currow);
             }else{
-                if(position%n==0) curcol = n-curcol;
+                if(position%n==0) curcol = n-1;
                 else curcol = position%n-1;
             }
         }

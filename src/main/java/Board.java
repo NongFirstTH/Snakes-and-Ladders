@@ -11,11 +11,11 @@ public class Board{
         this.arr = new Object[n][n];
         this.players = players;
         
-        ladders.add(new Ladder(new int[]{n-1,1},new int[]{n-4,1}));
-        ladders.add(new Ladder(new int[]{n-1,5},new int[]{n-2,6}));
+        ladders.add(new Ladder("L1",new int[]{n-1,1},new int[]{n-4,1}));
+        ladders.add(new Ladder("L2",new int[]{n-1,5},new int[]{n-2,6}));
 
-        snakes.add(new Snake(new int[]{n-3,2},new int[]{n-1,2}));
-        snakes.add(new Snake(new int[]{n-5,5},new int[]{n-3,5}));
+        snakes.add(new Snake("S1",new int[]{n-3,2},new int[]{n-1,2}));
+        snakes.add(new Snake("S2",new int[]{n-5,5},new int[]{n-3,5}));
 
         placeLadder();
         placeSnake();

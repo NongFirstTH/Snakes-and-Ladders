@@ -3,6 +3,8 @@ public class Main {
         BoardFactory bf = new BoardFactory();
         Board b = bf.Board3Player();
         Game g = new Game(b);
-        System.out.println(b.getBoard()[0][0]);
+        while(b.players.size()!=1){
+            g.play();
+        }
     }
 }
