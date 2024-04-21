@@ -1,10 +1,10 @@
-import java.util.LinkedList;
-
 public class Game {
     public Board board;
+    private int n;
 
     public Game(Board board){
         this.board = board;
+        n = board.getBoard().length;
     }
 
     public void play(){
@@ -13,37 +13,44 @@ public class Game {
         turn();
     }
 
-    private void move(Player p,int rollDice){
-        
-        //    if(board.getBoard()[row][col].equals(checkLadderHead(row,col))){
-            
-        //    }else if(board.getBoard()[row][col].equals(checkSnakeHead(row,col))){
+    public void move(Player p,int rollDice){
+        p.setPosition(p.position + rollDice,n);
+        int row = p.currow;
+        int col = p.curcol;
 
-        //    }else{
-        //     p.position += rollDice;
-        //    }
+            if(board.getBoard()[row][col] == null){
+                return ;
+            }else if(board.getBoard()[row][col].equals(checkLadderHead(row,col))){
+                Ladder l = (Ladder) board.getBoard()[row][col];
+                p.setPosition(l.tail()[1]+n-l.tail()[0]+p.position,n);
+            }else if(board.getBoard()[row][col].equals(checkSnakeHead(row,col))){
+                Snake s = (Snake) board.getBoard()[row][col];
+                p.setPosition(s.tail()[1]+n-s.tail()[0],n);
+            }
     }
 
-    private void turn(){
+    public void turn(){
         Player p = board.players.poll();
         board.players.add(p);
     }
 
-    private Ladder checkLadderHead(int row , int col){
+    public Ladder checkLadderHead(int row , int col){
+        if(board.getBoard()[row][col] == null) return null;
         for(Ladder ladder : board.ladders){
-            if(board.getBoard()[row][col].equals(ladder)) return ladder;
+            if(board.getBoard()[row][col].equals(ladder) && row == ladder.head()[0] &&  col == ladder.head()[1] ) return ladder;
         }
         return null;
     }
     
-    private Snake checkSnakeHead(int row , int col){
+    public Snake checkSnakeHead(int row , int col){
+        if(board.getBoard()[row][col] == null) return null;
         for(Snake snake : board.snakes){
-            if(board.getBoard()[row][col].equals(snake)) return snake;
+            if(board.getBoard()[row][col].equals(snake)  && row == snake.head()[0] &&  col == snake.head()[1] ) return snake;
         }
         return null;
     }
 
-    private void checkWinner(){
+    public void checkWinner(){
 
     }
 

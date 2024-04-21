@@ -1,7 +1,7 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class BoardFactory {
+public record BoardFactory() {
     public Board Board3Player(){
         int n = 10;
         Player p1 = new Player("red");

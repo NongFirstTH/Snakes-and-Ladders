@@ -5,10 +5,11 @@ import static org.junit.Assert.assertTrue;
 public class PlayerTest {
     BoardFactory bf = new BoardFactory();
     Board b = bf.Board3Player();
-    int position = b.players.peek().position;
     @Test
-    public void TestPosition(){
-        assertEquals(1,position);
+    public void TestsetPosition(){
+        Player p = b.players.peek();
+        p.setPosition(3,10);
+        assertEquals(3,p.position);
     }
     @Test
     public void TestCurrow(){
