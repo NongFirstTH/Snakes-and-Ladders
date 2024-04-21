@@ -1,4 +1,4 @@
-public class Snake {
+public class Snake implements ObjectInterface{
     private int [] head = new int[2];
     private int [] tail = new int[2];
 

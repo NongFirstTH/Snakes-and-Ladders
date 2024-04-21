@@ -1,9 +1,9 @@
 import java.util.Random;
 
 public class Player{
-    private int currow;
-    private int curcol;
-    private String color;
+    public int currow;
+    public int curcol;
+    public String color;
 
     public Player(String color){
         this.color = color;
