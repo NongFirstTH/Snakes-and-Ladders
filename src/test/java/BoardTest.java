@@ -1,6 +1,6 @@
 import org.junit.Test;
 
-public class TestBoard {
+public class BoardTest {
     @Test
     void testget(){
         

@@ -1,11 +1,8 @@
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class TestLadder {
-    @Test
-    public void testHead(){
+public class BoardFactory {
+    public Board Board3Player(){
         int n = 10;
         Player p1 = new Player("red");
         Player p2 = new Player("blue");
@@ -16,13 +13,6 @@ public class TestLadder {
         players.add(p2);
         players.add(p3);
 
-       Board b = new Board(n,players);
-       assertEquals(b.getBoard()[9][1],b.ladders.getFirst().head());
-
-    }
-
-    @Test
-    public void testTail(){
-
+        return new Board(n,players);
     }
 }

@@ -11,7 +11,7 @@ public class Snake implements ObjectInterface{
         return head;
     }
     
-    public int[] tail(){
+    public int [] tail(){
         return tail;
     }
 }
