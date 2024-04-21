@@ -1,20 +1,8 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class Main {
     public static void main(String[] args) {
-        int n = 10;
-        Player p1 = new Player("red");
-        Player p2 = new Player("blue");
-        Player p3 = new Player("green");
-
-        Queue<Player> players = new LinkedList<>();
-        players.add(p1);
-        players.add(p2);
-        players.add(p3);
-        
-
-        Board board = new Board(n,players);
-        Game g = new Game(board);
+        BoardFactory bf = new BoardFactory();
+        Board b = bf.Board3Player();
+        Game g = new Game(b);
+        System.out.println(b.getBoard()[0][0]);
     }
 }

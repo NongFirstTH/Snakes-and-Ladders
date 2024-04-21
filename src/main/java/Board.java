@@ -10,12 +10,7 @@ public class Board{
     public Board(int n,Queue<Player> players){
         this.arr = new Object[n][n];
         this.players = players;
-
-        for(Player p : players){
-            p.currow = n-1;
-            p.curcol = 0;
-        }
-
+        
         ladders.add(new Ladder(new int[]{n-1,1},new int[]{n-4,1}));
         ladders.add(new Ladder(new int[]{n-1,5},new int[]{n-2,6}));
 
