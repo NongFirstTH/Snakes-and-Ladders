@@ -59,8 +59,8 @@ public class GameTest {
     @Test
     public void testMove(){
         Player p = b.players.peek();
-        assertEquals(p.position, 1);
 
+        assertEquals(p.position, 1);
         g.move(p,2);
         assertEquals(3, p.position);
         g.move(p,3);
@@ -77,5 +77,19 @@ public class GameTest {
         assertEquals(3, p.position);
         g.move(p,3);
         assertEquals(14, p.position);
+        p.setPosition(99,10);
+        g.move(p,1);
+        assertEquals(100, p.position);
+        g.move(p,3);
+        assertEquals(97, p.position);
+    }
+
+    @Test
+    public void testCheckWinner(){
+        Player p = b.players.peek();
+        p.setPosition(99,10);
+        g.move(p,1);
+        g.checkWinner();
+        assertEquals(g.winner.peek(),p);
     }
 }

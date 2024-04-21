@@ -12,8 +12,13 @@ public class Player{
 
     public void setPosition(int pos,int n){
         this.position = pos;
-        currow = n-1 - (position/n);
-        if(currow % 2 == 0){
+
+        if(position >= n*n) currow = 0;
+        else currow = n-1 - (position/n);
+
+        if(position >= n*n) {
+            curcol = 0;
+        } else if(currow % 2 == 0){
             curcol = n - (pos%n);
         }else{
             if(currow == n-1){
@@ -23,6 +28,7 @@ public class Player{
                 else curcol = position%n-1;
             }
         }
+
     }
 
     public int RollDice(){

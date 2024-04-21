@@ -1,5 +1,9 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Game {
     public Board board;
+    public Queue<Player> winner = new LinkedList<>();
     private int n;
 
     public Game(Board board){
@@ -10,6 +14,7 @@ public class Game {
     public void play(){
         Player p = board.players.peek();
         move(p,p.RollDice());
+        checkWinner();
         turn();
     }
 
@@ -18,7 +23,10 @@ public class Game {
         int row = p.currow;
         int col = p.curcol;
 
-            if(board.getBoard()[row][col] == null){
+            if(p.position > n*n){
+                int finish = n*n;
+                p.setPosition(finish-(p.position - finish),n);
+            }else if(board.getBoard()[row][col] == null){
                 return ;
             }else if(board.getBoard()[row][col].equals(checkLadderHead(row,col))){
                 Ladder l = (Ladder) board.getBoard()[row][col];
@@ -51,7 +59,14 @@ public class Game {
     }
 
     public void checkWinner(){
-
+        int finish = n*n;
+        for(Player p : board.players){
+            if(p.position == finish){
+                winner.add(p);
+                board.players.remove(p);
+                return;
+            }
+        }
     }
 
     public void printBoard(){
