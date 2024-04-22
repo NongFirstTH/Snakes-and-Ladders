@@ -14,10 +14,11 @@ public class Game {
     public void play(){
         Player p = board.players.peek();
         int roll = p.RollDice();
-        System.out.println(p.color + " roll " + roll);
-        printBoard();
+        printBoard(p,roll);
         move(p,roll);
-        System.out.println(p.color +" pos = "+ p.position +" r:"+ p.currow+" c:" + p.curcol);
+        int width = (148-p.color.length()+((int)Math.log10(p.position)+1))/2;
+        String bar = "|" + "-".repeat(width) + "%s" + "-".repeat(width) + "|";
+        System.out.printf(bar,p.color +" possition = "+ p.position);System.out.println();
         checkWinner();
         turn();
     }
@@ -44,7 +45,7 @@ public class Game {
                 p.setPosition(calPosition(l.tail()[0], l.tail()[1]), n);
             }else if(board.getBoard()[row][col].equals(checkSnakeHead(row,col))){
                 Snake s = (Snake) board.getBoard()[row][col];
-                p.setPosition(calPosition(row, col), n);
+                p.setPosition(calPosition(s.tail()[0], s.tail()[1]), n);
             }
     }
 
@@ -80,27 +81,38 @@ public class Game {
         }
     }
 
-    public void printBoard(){
+    public void printBoard(Player player,int roll){
+        int width = (153-player.color.length()+((int)Math.log10(roll)+1))/2;
+        String bar = "|" + "-".repeat(width) + "%s" + "-".repeat(width) + "|";
+        System.out.printf(bar,player.color + ": roll = " + roll);System.out.println();
+
         for(int i = 0;i<n;i++){
             for(int j = 0;j<n;j++){
+                StringBuilder Stringplayer = new StringBuilder();
                 boolean hasPlayer = false;
                     for(Player p : board.players){
                         if(i == p.currow && j == p.curcol){
-                            System.out.printf("%-10s",p.color);
+                            Stringplayer.append(p.color).append(" ");
                             hasPlayer = true;
                         }
                     }
+
+                    String format = "%" + (-18) + "s";
                 if(!hasPlayer) {
-                    if(board.getBoard()[i][j] == null) System.out.printf("%-10s",calPosition(i,j));
+                    if(board.getBoard()[i][j] == null) System.out.printf(format,calPosition(i,j));
+                }else{
+                    System.out.printf(String.format(format,Stringplayer.toString()));
                 }
+
                     if(board.getBoard()[i][j] instanceof Ladder l){
-                        System.out.printf("%-10s",l.name());
+                        System.out.printf(format,l.name());
                     }else if(board.getBoard()[i][j] instanceof Snake s){
-                        System.out.printf("%-10s",s.name());
+                        System.out.printf(format,s.name());
                     }
             }
             System.out.println();
         }
+
     }
 
 }
