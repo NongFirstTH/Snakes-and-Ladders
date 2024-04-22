@@ -12,15 +12,15 @@ public class Game {
     }
 
     public void play(){
-        Player p = board.players.peek();
-        int roll = p.RollDice();
-        printBoard(p,roll);
-        move(p,roll);
-        int width = (148-p.color.length()+((int)Math.log10(p.position)+1))/2;
-        String bar = "|" + "-".repeat(width) + "%s" + "-".repeat(width) + "|";
-        System.out.printf(bar,p.color +" possition = "+ p.position);System.out.println();
-        checkWinner();
-        turn();
+        while(board.players.size()!=1) {
+            Player p = board.players.peek();
+            int roll = p.RollDice();
+            move(p, roll);
+            printBoard(p, roll);
+            checkWinner();
+            turn();
+        }
+        printWinner();
     }
 
     private int calPosition(int row,int col){
@@ -82,9 +82,9 @@ public class Game {
     }
 
     public void printBoard(Player player,int roll){
-        int width = (153-player.color.length()+((int)Math.log10(roll)+1))/2;
-        String bar = "|" + "-".repeat(width) + "%s" + "-".repeat(width) + "|";
-        System.out.printf(bar,player.color + ": roll = " + roll);System.out.println();
+        int widthhead = (163-14-player.color.length()-((int)Math.log10(player.position)+1))/2;
+        String Hbar = "|" + "-".repeat(widthhead) + "%s" + "-".repeat(widthhead) + "|";
+        System.out.printf(Hbar,player.color + " turn: roll = " + roll);System.out.println();
 
         for(int i = 0;i<n;i++){
             for(int j = 0;j<n;j++){
@@ -105,15 +105,31 @@ public class Game {
                 }
 
                     if(board.getBoard()[i][j] instanceof Ladder l){
-                        System.out.printf(format,l.name());
+                        System.out.printf(format,"| "+l.name()+" |");
                     }else if(board.getBoard()[i][j] instanceof Snake s){
-                        System.out.printf(format,s.name());
+                        System.out.printf(format,'_'+s.name()+'_');
                     }
             }
             System.out.println();
         }
-
+        int widthtail = (163-20-player.color.length()-((int)Math.log10(player.position)+1))/2;
+        String Tbar = "|" + "-".repeat(widthtail) + "%s" + "-".repeat(widthtail) + "|";
+        System.out.printf(Tbar,player.color +" go to: possition = "+ player.position);System.out.println();
     }
 
+    public void printWinner(){
+        String format = "|%-10s|";
+        int i = 1;
+        System.out.print("-".repeat(12));System.out.println();
+        System.out.printf(format,"Winner");System.out.println();
+        System.out.print("-".repeat(12));System.out.println();
+
+        while(!winner.isEmpty()){
+            System.out.printf(format,i++ +" "+winner.poll().color);System.out.println();
+        }
+        System.out.printf(format,i +" "+board.players.poll().color);System.out.println();
+
+        System.out.print("-".repeat(12));System.out.println();
+    }
 }
 
