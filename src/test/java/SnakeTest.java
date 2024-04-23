@@ -6,8 +6,8 @@ public class SnakeTest{
     Board b = bf.Board3Player();
     @Test
     public void testSameObject(){
-        assertEquals(b.getBoard()[7][2],b.snakes.getFirst());
-        assertEquals(b.getBoard()[9][2],b.snakes.getFirst());
+        assertEquals(b.cell[7][2],b.snakes.getFirst());
+        assertEquals(b.cell[9][2],b.snakes.getFirst());
     }
     @Test
     public void testHead(){

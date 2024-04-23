@@ -9,20 +9,20 @@ public class PlayerTest {
     public void TestsetPosition(){
         Player p = b.players.peek();
         p.setPosition(3,10);
-        assertEquals(3,p.position);
+        assertEquals(3, p.getPosition());
     }
     @Test
     public void TestCurrow(){
-        assertEquals(9,b.players.peek().currow);
+        assertEquals(9,b.players.peek().getCurrentRowCell());
     }
     @Test
     public void TestCurcol(){
-        assertEquals(0,b.players.peek().curcol);
+        assertEquals(0,b.players.peek().getCurrentColCell());
     }
     @Test
     public void TestRollDice(){
         for(int i = 0;i<1000;i++){
-            int r = b.players.peek().RollDice();
+            int r = b.players.peek().rollDice();
             assertTrue(r >= 1 && r <= 6);
         }
     }

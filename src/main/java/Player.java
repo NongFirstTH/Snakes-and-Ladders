@@ -18,16 +18,14 @@ public class Player{
         int rowOfPositionFromLower = (position-1)/boardSize;
         int unitDigitOfPosition = position%boardSize;
 
-        currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
+        if(isFinish()) currentRowCell = 0;
+        else currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
         
         if(isFinish()) {
             currentColCell = 0;
         } else if(isRowOfIndexOfPositionOdd()){
-            if(isPositionDividedByBoardsize()){
-                currentColCell = 0;
-            }else{
-                currentColCell = boardSize - unitDigitOfPosition;
-            } 
+            if(isPositionDividedByBoardsize()) currentColCell = 0;
+            else currentColCell = boardSize - unitDigitOfPosition;
         }else{
             if(isFirstRow()){
                 currentColCell = position-1;
@@ -39,6 +37,51 @@ public class Player{
                 } 
             }
         }
+    }
+
+    public void move(Board board,int rollDice){
+        setPosition(position + rollDice,boardSize);
+        Object currentCell;
+
+        if(board.cell[currentRowCell][currentColCell] == null){
+            currentCell = null;
+        }else{
+            currentCell = board.cell[currentRowCell][currentColCell];
+        }
+
+        if(isFinish()){
+            int finishPosition = boardSize*boardSize;
+            int reversePosition = finishPosition-(position - finishPosition);
+
+            setPosition(reversePosition,boardSize);
+        }else if(currentCell == null){
+            return ;
+        }else if(currentCell instanceof Ladder ladder){
+            int tailPosition = calPosition(ladder.tail()[0], ladder.tail()[1]);
+            
+            setPosition(tailPosition, boardSize);
+        }else if(currentCell instanceof Snake snake){
+            int tailPosition = calPosition(snake.tail()[0], snake.tail()[1]);
+            
+            setPosition(tailPosition, boardSize);
+        }
+    }
+
+    private int calPosition(int rowCell,int colCell){
+        int position = 1;
+        int remainDigit = (boardSize-1-rowCell)*10;
+        
+        if(rowCell%2 == 0){
+            int unitDigit = boardSize-colCell;
+
+            position = remainDigit + unitDigit;
+        }else{
+            int unitDigit = colCell+1;
+
+            position = remainDigit + unitDigit;
+        } 
+
+        return position;
     }
 
     public int getPosition(){
@@ -59,11 +102,13 @@ public class Player{
     
     public int rollDice(){
         Random randomNumber = new Random();
+
         return randomNumber.nextInt(6)+1;
     }
 
     private Boolean isFinish(){
         int finishPosition = boardSize*boardSize;
+
         return position >= finishPosition;
     } 
 
@@ -76,6 +121,7 @@ public class Player{
     }
 
     private Boolean isFirstRow(){
-        return currentColCell == boardSize-1;
+        return currentRowCell == boardSize-1;
     }
+
 }

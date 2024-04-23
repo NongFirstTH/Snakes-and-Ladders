@@ -15,61 +15,17 @@ public class Game {
         while(board.players.size()!=1) {
             Player p = board.players.peek();
             int roll = p.rollDice();
-            move(p, roll);
+            p.move(board, roll);
             printBoard(p, roll);
             checkWinner();
             turn();
         }
         printWinner();
     }
-
-    private int calPosition(int row,int col){
-        int position = 1;
-        
-        if(row%2 == 0) position = (boardSize-1-row)*10 + boardSize-col;
-        else position = (boardSize-1-row)*10 + col+1;
-
-        return position;
-    }
     
-    public void move(Player p,int rollDice){
-        p.setPosition(p.getPosition() + rollDice,boardSize);
-        int row = p.getCurrentRowCell();
-        int col = p.getCurrentColCell();
-
-        if(p.getPosition() > boardSize*boardSize){
-            int finish = boardSize;
-            p.setPosition(finish-(p.getPosition() - finish),boardSize);
-        }else if(board.cell[row][col] == null){
-            return ;
-        }else if(board.cell[row][col].equals(checkLadderHead(row,col))){
-            Ladder l = (Ladder) board.cell[row][col];
-            p.setPosition(calPosition(l.tail()[0], l.tail()[1]), boardSize);
-        }else if(board.cell[row][col].equals(checkSnakeHead(row,col))){
-            Snake s = (Snake) board.cell[row][col];
-            p.setPosition(calPosition(s.tail()[0], s.tail()[1]), boardSize);
-        }
-    }
-
     public void turn(){
         Player p = board.players.poll();
         board.players.add(p);
-    }
-
-    public Ladder checkLadderHead(int row , int col){
-        if(board.cell[row][col] == null) return null;
-        for(Ladder ladder : board.ladders){
-            if(board.cell[row][col].equals(ladder) && row == ladder.head()[0] &&  col == ladder.head()[1] ) return ladder;
-        }
-        return null;
-    }
-    
-    public Snake checkSnakeHead(int row , int col){
-        if(board.cell[row][col] == null) return null;
-        for(Snake snake : board.snakes){
-            if(board.cell[row][col].equals(snake)  && row == snake.head()[0] &&  col == snake.head()[1] ) return snake;
-        }
-        return null;
     }
 
     public void checkWinner(){
@@ -83,6 +39,23 @@ public class Game {
         }
     }
 
+    private int calPosition(int rowCell,int colCell){
+        int position = 1;
+        int remainDigit = (boardSize-1-rowCell)*10;
+        
+        if(rowCell%2 == 0){
+            int unitDigit = boardSize-colCell;
+
+            position = remainDigit + unitDigit;
+        }else{
+            int unitDigit = colCell+1;
+
+            position = remainDigit + unitDigit;
+        } 
+
+        return position;
+    }
+    
     public void printBoard(Player player,int roll){
         int widthhead = (163-14-player.getColor().length()-((int)Math.log10(player.getPosition())+1))/2;
         String Hbar = "|" + "-".repeat(widthhead) + "%s" + "-".repeat(widthhead) + "|";

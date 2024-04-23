@@ -6,8 +6,8 @@ public class LadderTest {
     Board b = bf.Board3Player();
     @Test
     public void testSameObject(){
-        assertEquals(b.getBoard()[9][1],b.ladders.getFirst());
-        assertEquals(b.getBoard()[6][1],b.ladders.getFirst());
+        assertEquals(b.cell[9][1],b.ladders.getFirst());
+        assertEquals(b.cell[6][1],b.ladders.getFirst());
     }
     @Test
     public void testHead(){
