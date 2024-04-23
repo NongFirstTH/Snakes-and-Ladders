@@ -1,4 +1,4 @@
-public class Ladder implements ObjectInterface{
+public class Ladder{
     private String name;
     private int [] head = new int[2];
     private int [] tail = new int[2];

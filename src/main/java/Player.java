@@ -1,38 +1,81 @@
 import java.util.Random;
 
 public class Player{
-    public int position;
-    public int currow;
-    public int curcol;
-    public String color;
+    private int position;
+    private int currentRowCell;
+    private int currentColCell;
+    private String color;
+    private int boardSize;
 
-    public Player(String color){
+    public Player(String color,int boardSize){
         this.color = color;
+        this.boardSize = boardSize;
     }
 
-    public void setPosition(int pos,int n){
-        this.position = pos;
+    public void setPosition(int position,int boardSize){
+        this.position = position;
+        int maxIndexOfBoard = boardSize-1;
+        int rowOfPositionFromLower = (position-1)/boardSize;
+        int unitDigitOfPosition = position%boardSize;
 
-        currow = n-1 - ((position-1)/n);
-
-        if(position >= n*n) {
-            curcol = 0;
-        } else if((position / n)%2 == 1){
-                if(position%n==0) curcol = 0;
-                else curcol = n - (pos%n);
-        }else{
-            if(currow == n-1){
-                curcol = position-n+currow;
+        currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
+        
+        if(isFinish()) {
+            currentColCell = 0;
+        } else if(isRowOfIndexOfPositionOdd()){
+            if(isPositionDividedByBoardsize()){
+                currentColCell = 0;
             }else{
-                if(position%n==0) curcol = n-1;
-                else curcol = position%n-1;
+                currentColCell = boardSize - unitDigitOfPosition;
+            } 
+        }else{
+            if(isFirstRow()){
+                currentColCell = position-1;
+            }else{
+                if(isPositionDividedByBoardsize()){
+                    currentColCell = maxIndexOfBoard;
+                }else{
+                    currentColCell = unitDigitOfPosition-1;
+                } 
             }
         }
-
     }
 
-    public int RollDice(){
-        Random r = new Random();
-        return r.nextInt(6)+1;
+    public int getPosition(){
+        return position;
+    }
+
+    public int getCurrentRowCell(){
+        return currentRowCell;
+    }
+
+    public int getCurrentColCell(){
+        return currentColCell;
+    }
+
+    public String getColor(){
+        return color;
+    }
+    
+    public int rollDice(){
+        Random randomNumber = new Random();
+        return randomNumber.nextInt(6)+1;
+    }
+
+    private Boolean isFinish(){
+        int finishPosition = boardSize*boardSize;
+        return position >= finishPosition;
+    } 
+
+    private Boolean isRowOfIndexOfPositionOdd(){
+        return (position / boardSize)%2 == 1;
+    }
+
+    private Boolean isPositionDividedByBoardsize(){
+        return position%boardSize==0;
+    }
+
+    private Boolean isFirstRow(){
+        return currentColCell == boardSize-1;
     }
 }
