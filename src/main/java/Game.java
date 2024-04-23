@@ -12,7 +12,7 @@ public class Game {
     }
 
     public void play(){
-        while(board.players.size()!=1) {
+        while(board.players.size() != 1){
             Player player = board.players.peek();
             int roll = player.rollDice();
 

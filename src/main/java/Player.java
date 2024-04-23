@@ -18,14 +18,20 @@ public class Player{
         int rowOfPositionFromLower = (position-1)/boardSize;
         int unitDigitOfPosition = position%boardSize;
 
-        if(isFinish()) currentRowCell = 0;
-        else currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
+        if(isFinish()){
+            currentRowCell = 0;
+        }else{
+            currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
+        } 
         
-        if(isFinish()) {
+        if(isFinish()){
             currentColCell = 0;
         } else if(isRowOfIndexOfPositionOdd()){
-            if(isPositionDividedByBoardsize()) currentColCell = 0;
-            else currentColCell = boardSize - unitDigitOfPosition;
+            if(isPositionDividedByBoardsize()){
+                currentColCell = 0;
+            }else{
+                currentColCell = boardSize - unitDigitOfPosition;
+            } 
         }else{
             if(isFirstRow()){
                 currentColCell = position-1;
@@ -117,7 +123,7 @@ public class Player{
     }
 
     private Boolean isPositionDividedByBoardsize(){
-        return position%boardSize==0;
+        return position%boardSize == 0;
     }
 
     private Boolean isFirstRow(){
