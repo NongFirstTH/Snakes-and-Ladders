@@ -19,7 +19,7 @@ public class Game {
             player.move(board, roll);
             printHeader(player, roll);
             printBoard();
-            printFooter(player, roll);
+            printFooter(player);
             checkWinner();
             changeTurn();
         }
@@ -62,17 +62,25 @@ public class Game {
     }
 
     public void printHeader(Player player,int roll){
-        int headerWidth = (163-14-player.getColor().length()-((int)Math.log10(player.getPosition())+1))/2;
+        int dashWidth = 163;
+        int textAtMiddleWidth = dashWidth-14-player.getColor().length();
+        int digitOfdice = (int)Math.log10(roll)+1;
+        int headerWidth = (textAtMiddleWidth-digitOfdice)/2;
         String Header = "|" + "-".repeat(headerWidth) + "%s" + "-".repeat(headerWidth) + "|";
 
-        System.out.printf(Header,player.getColor() + " turn: roll = " + roll + '\n');
+        System.out.printf(Header,player.getColor() + " turn: roll = " + roll);
+        System.out.println();
     }
 
-    public void printFooter(Player player,int roll){
-        int footerWidth = (163-20-player.getColor().length()-((int)Math.log10(player.getPosition())+1))/2;
+    public void printFooter(Player player){
+        int dashWidth = 163;
+        int textAtMiddleWidth = dashWidth-20-player.getColor().length();
+        int digitOfPosition = (int)Math.log10(player.getPosition());
+        int footerWidth = (textAtMiddleWidth-digitOfPosition)/2;
         String footer = "|" + "-".repeat(footerWidth) + "%s" + "-".repeat(footerWidth) + "|";
 
-        System.out.printf(footer,player.getColor() +" go to: possition = " + player.getPosition() + '\n');
+        System.out.printf(footer,player.getColor() +" go to: possition = " + player.getPosition());
+        System.out.println();
     }
 
     public void printBoard(){

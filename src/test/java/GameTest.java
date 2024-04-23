@@ -26,11 +26,11 @@ public class GameTest {
         Board b = new Board(n, players);
         Game g = new Game(b);
 
-        g.turn();
+        g.changeTurn();
         assertEquals(b.players.peek(),p2);
-        g.turn();
+        g.changeTurn();
         assertEquals(b.players.peek(),p3);
-        g.turn();
+        g.changeTurn();
         assertEquals(b.players.peek(),p1);
     }
 
