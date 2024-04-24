@@ -7,7 +7,7 @@ public class Game {
     private int boardSize;
     private Dice dice;
 
-    public Game(Board board, Dice dice) {// TODO : เว้น spacebarก่อนปีกกา
+    public Game(Board board, Dice dice) {
         this.board = board;
         this.boardSize = board.cells.length;
         this.dice = dice;
@@ -16,8 +16,10 @@ public class Game {
     public void play() {
         Player player = board.players.peek();
 
+        //TODO : ไม่ต้องเอา Player ออกจาก board เกม ให้เช็คตอนเปลี่ยน turn แต่ละคน
+        //TODO : ใช่ชื่อให้ condition ใน while เป็น ?
         while (board.players.size() != 1) {
-            int face = player.rollDice(dice);// TODO : เปลี่ยน roll เป็น face
+            int face = player.rollDice(dice);
 
             player.move(board, face);
             printHeader(player, face);
@@ -69,8 +71,12 @@ public class Game {
         int dashWidth = ((boardSize - 1) * 18) + 1;
         int textTurnRollWidth = 14;
         int textAtMiddleWidth = dashWidth - textTurnRollWidth - player.getColor().length();
+        
+        //TODO : d -> D
         int digitOfdice = (int) Math.log10(roll) + 1;
         int headerWidth = (textAtMiddleWidth - digitOfdice) / 2;
+        
+        //TODO : H -> h
         String Header = "|" + "-".repeat(headerWidth) + "%s" + "-".repeat(headerWidth) + "|";
 
         System.out.printf(Header, player.getColor() + " turn: roll = " + roll);
@@ -116,8 +122,8 @@ public class Game {
                 } else if (board.cells[rowCell][columnCell] instanceof Snake snake) {
                     System.out.printf(format, '_' + snake.name() + '_');
                 }
-
             }
+
             System.out.println();
         }
     }
@@ -126,6 +132,7 @@ public class Game {
         String format = "|%-10s|";
         int rank = 1;
 
+        //TODO : สร้างฟังก์ชันแยกตรง print repeat
         System.out.print("-".repeat(12));
         System.out.println();
         System.out.printf(format, "Winner");

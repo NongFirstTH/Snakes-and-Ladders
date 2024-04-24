@@ -18,6 +18,8 @@ public class Player {
 
     public void move(Board board, int face) {
         setPosition(position + face);
+
+        //TODO : ประกาศตัวแปรโดยให้ค่าตั้งต้นเป็น board.cells[currentRowCell][currentColumnCell];
         Object currentCell;
 
         if (board.cells[currentRowCell][currentColumnCell] == null) {
@@ -26,7 +28,7 @@ public class Player {
             currentCell = board.cells[currentRowCell][currentColumnCell];
         }
 
-        if (isPlayerAtFinishPosition()) {// TODO: จาก isFinish -> isPlayerAtFinishPosition?
+        if (isPlayerAtFinishPosition()) {
             int finishPosition = boardSize * boardSize;
             int positionToGo = finishPosition - (position - finishPosition);
 
@@ -34,7 +36,6 @@ public class Player {
         } else if (currentCell == null) {
             return;
         } else if (currentCell instanceof Ladder ladder) {
-            // TODO: เปลี่ยนชื่อcal -> calculate
             int tailPosition = calculatePosition(ladder.tail()[0], ladder.tail()[1]);
 
             setPosition(tailPosition);
@@ -85,6 +86,7 @@ public class Player {
         }
     }
 
+    //TODO : colCell -> columnCell
     private int calculatePosition(int rowCell, int colCell) {
         int position = 1;
         int remainDigit = (boardSize - 1 - rowCell) * 10;
@@ -118,11 +120,13 @@ public class Player {
         return color;
     }
 
-    public int rollDice(Dice dice) {// TODO: รับลูกเต๋าลูกเดียวกัน
+    public int rollDice(Dice dice) {
         return dice.face();
     }
 
     private Boolean isPlayerAtFinishPosition() {
+
+        //TODO : คำนวณ boardSize * boardSize ก่อน แล้วค่อยเอามาใช้ 
         int finishPosition = boardSize * boardSize;
 
         return position >= finishPosition;
