@@ -61,7 +61,11 @@ public class Player {
         int unitDigitOfPosition = position % boardSize;
 
         if (isPlayerAtFinishPosition()) {
-            return 0;
+            if (boardSize % 2 == 0) {
+                return 0;
+            } else {
+                return boardSize - 1;
+            }
         } else if (isRowOfIndexOfPositionOdd()) {
             if (isPositionDividedByBoardsize()) {
                 return 0;
