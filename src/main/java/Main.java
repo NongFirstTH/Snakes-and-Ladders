@@ -1,8 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        BoardFactory bf = new BoardFactory();
-        Board b = bf.Board3Player();
-        Game g = new Game(b);
+        BoardFactory boardFactory = new BoardFactory();
+        Board board = boardFactory.Board3Player();
+        Dice dice = new Dice(6);
+        Game g = new Game(board, dice);
         g.play();
     }
 }

@@ -5,19 +5,21 @@ public class Game {
     public Board board;
     public Queue<Player> winners = new LinkedList<>();
     private int boardSize;
+    private Dice dice;
 
-    public Game(Board board) {// TODO : เว้น spacebar
+    public Game(Board board, Dice dice) {// TODO : เว้น spacebarก่อนปีกกา
         this.board = board;
         this.boardSize = board.cell.length;
+        this.dice = dice;
     }
 
     public void play() {
         while (board.players.size() != 1) {
             Player player = board.players.peek();
-            int roll = player.rollDice();// TODO : เปลี่ยนเป็น face
+            int face = player.rollDice(dice);// TODO : เปลี่ยน roll เป็น face
 
-            player.move(board, roll);
-            printHeader(player, roll);
+            player.move(board, face);
+            printHeader(player, face);
             printBoard();
             printFooter(player);
             checkWinner();
@@ -44,7 +46,7 @@ public class Game {
         }
     }
 
-    private int calPosition(int rowCell, int colCell) {
+    private int calculatePosition(int rowCell, int colCell) {
         int position = 1;
         int remainDigit = (boardSize - 1 - rowCell) * 10;
 
@@ -90,7 +92,7 @@ public class Game {
                 boolean hasPlayerAtCell = false;
 
                 for (Player player : board.players) {
-                    if (rowCell == player.getCurrentRowCell() && colCell == player.getCurrentColCell()) {
+                    if (rowCell == player.getCurrentRowCell() && colCell == player.getCurrentColumnCell()) {
                         stringPlayer.append(player.getColor()).append(" ");
                         hasPlayerAtCell = true;
                     }
@@ -100,7 +102,7 @@ public class Game {
 
                 if (!hasPlayerAtCell) {
                     if (board.cell[rowCell][colCell] == null)
-                        System.out.printf(format, calPosition(rowCell, colCell));
+                        System.out.printf(format, calculatePosition(rowCell, colCell));
                 } else {
                     System.out.printf(String.format(format, stringPlayer.toString()));
                 }

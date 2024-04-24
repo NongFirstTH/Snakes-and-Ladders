@@ -6,7 +6,8 @@ import java.util.Queue;
 public class GameTest {
     BoardFactory bf = new BoardFactory();
     Board b = bf.Board3Player();
-    Game g = new Game(b);
+    Dice d  = new Dice(6);
+    Game g = new Game(b,d);
     
     @Test
     public void testTurn(){
@@ -15,16 +16,16 @@ public class GameTest {
         Player p2 = new Player("blue",n);
         Player p3 = new Player("green",n);
         
-        p1.setPosition(1, n);
-        p2.setPosition(1, n);
-        p3.setPosition(1, n);
+        p1.setPosition(1);
+        p2.setPosition(1);
+        p3.setPosition(1);
         
         Queue<Player> players = new LinkedList<>();
         players.add(p1);
         players.add(p2);
         players.add(p3);
         Board b = new Board(n, players);
-        Game g = new Game(b);
+        Game g = new Game(b,d);
 
         g.changeTurn();
         assertEquals(b.players.peek(),p2);
@@ -54,7 +55,7 @@ public class GameTest {
         p.move(b,3);
         assertEquals(14, p.getPosition());
 
-        p.setPosition(99,10);
+        p.setPosition(99);
         p.move(b,1);
         assertEquals(100, p.getPosition());
         p.move(b,3);
@@ -64,7 +65,7 @@ public class GameTest {
     @Test
     public void testCheckWinner(){
         Player p = b.players.peek();
-        p.setPosition(99,10);
+        p.setPosition(99);
         p.move(b,1);
         g.checkWinner();
         assertEquals(g.winners.peek(),p);

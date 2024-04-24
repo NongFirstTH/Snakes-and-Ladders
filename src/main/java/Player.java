@@ -1,9 +1,7 @@
-import java.util.Random;
-
 public class Player {
     private int position;
     private int currentRowCell;
-    private int currentColCell;
+    private int currentColumnCell;
     private String color;
     private int boardSize;
 
@@ -14,67 +12,76 @@ public class Player {
 
     public void setPosition(int position) {
         this.position = position;
-        int maxIndexOfBoard = boardSize - 1;
-        int rowOfPositionFromLower = (position - 1) / boardSize;
-        int unitDigitOfPosition = position % boardSize;
+        currentRowCell = calculateRowCell(position);
+        currentColumnCell = calculateColumnCell(position);
+    }
 
-        if (isFinish()) {
-            currentRowCell = 0;
+    public void move(Board board, int face) {
+        setPosition(position + face);
+        Object currentCell;
+
+        if (board.cell[currentRowCell][currentColumnCell] == null) {
+            currentCell = null;
         } else {
-            currentRowCell = maxIndexOfBoard - rowOfPositionFromLower;
+            currentCell = board.cell[currentRowCell][currentColumnCell];
         }
 
-        if (isFinish()) {
-            currentColCell = 0;
+        if (isPlayerAtFinishPosition()) {// TODO: จาก isFinish isPlayerAtFinishPosition?
+            int finishPosition = boardSize * boardSize;
+            int positionToGo = finishPosition - (position - finishPosition);
+
+            setPosition(positionToGo);
+        } else if (currentCell == null) {
+            return;
+        } else if (currentCell instanceof Ladder ladder) {
+            // TODO: เปลี่ยนชื่อcal -> calculate
+            int tailPosition = calculatePosition(ladder.tail()[0], ladder.tail()[1]);
+
+            setPosition(tailPosition);
+        } else if (currentCell instanceof Snake snake) {
+            int tailPosition = calculatePosition(snake.tail()[0], snake.tail()[1]);
+
+            setPosition(tailPosition);
+        }
+    }
+
+    private int calculateRowCell(int position) {
+        int maxIndexOfBoard = boardSize - 1;
+        int rowOfPositionFromLower = (position - 1) / boardSize;
+
+        if (isPlayerAtFinishPosition()) {
+            return 0;
+        } else {
+            return maxIndexOfBoard - rowOfPositionFromLower;
+        }
+    }
+
+    private int calculateColumnCell(int position) {
+        int maxIndexOfBoard = boardSize - 1;
+        int unitDigitOfPosition = position % boardSize;
+
+        if (isPlayerAtFinishPosition()) {
+            return 0;
         } else if (isRowOfIndexOfPositionOdd()) {
             if (isPositionDividedByBoardsize()) {
-                currentColCell = 0;
+                return 0;
             } else {
-                currentColCell = boardSize - unitDigitOfPosition;
+                return boardSize - unitDigitOfPosition;
             }
         } else {
             if (isFirstRow()) {
-                currentColCell = position - 1;
+                return position - 1;
             } else {
                 if (isPositionDividedByBoardsize()) {
-                    currentColCell = maxIndexOfBoard;
+                    return maxIndexOfBoard;
                 } else {
-                    currentColCell = unitDigitOfPosition - 1;
+                    return unitDigitOfPosition - 1;
                 }
             }
         }
     }
 
-    public void move(Board board, int rollDice) {
-        setPosition(position + rollDice);
-        Object currentCell;
-
-        if (board.cell[currentRowCell][currentColCell] == null) {
-            currentCell = null;
-        } else {
-            currentCell = board.cell[currentRowCell][currentColCell];
-        }
-
-        if (isFinish()) {// TODO: จาก isFinish แก้เป็น ...?
-            int finishPosition = boardSize * boardSize;
-            int reversePosition = finishPosition - (position - finishPosition);
-
-            setPosition(reversePosition);
-        } else if (currentCell == null) {
-            return;
-        } else if (currentCell instanceof Ladder ladder) {
-            // TODO: เปลี่ยนชื่อcal -> calculate
-            int tailPosition = calPosition(ladder.tail()[0], ladder.tail()[1]);
-
-            setPosition(tailPosition);
-        } else if (currentCell instanceof Snake snake) {
-            int tailPosition = calPosition(snake.tail()[0], snake.tail()[1]);
-
-            setPosition(tailPosition);
-        }
-    }
-
-    private int calPosition(int rowCell, int colCell) {
+    private int calculatePosition(int rowCell, int colCell) {
         int position = 1;
         int remainDigit = (boardSize - 1 - rowCell) * 10;
 
@@ -99,21 +106,19 @@ public class Player {
         return currentRowCell;
     }
 
-    public int getCurrentColCell() {
-        return currentColCell;
+    public int getCurrentColumnCell() {
+        return currentColumnCell;
     }
 
     public String getColor() {
         return color;
     }
 
-    public int rollDice() {// TODO: รับลูกเต๋าลูกเดียวกัน
-        Random randomNumber = new Random();
-
-        return randomNumber.nextInt(6) + 1;
+    public int rollDice(Dice dice) {// TODO: รับลูกเต๋าลูกเดียวกัน
+        return dice.face();
     }
 
-    private Boolean isFinish() {
+    private Boolean isPlayerAtFinishPosition() {
         int finishPosition = boardSize * boardSize;
 
         return position >= finishPosition;

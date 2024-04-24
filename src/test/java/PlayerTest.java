@@ -8,7 +8,7 @@ public class PlayerTest {
     @Test
     public void TestsetPosition(){
         Player p = b.players.peek();
-        p.setPosition(3,10);
+        p.setPosition(3);
         assertEquals(3, p.getPosition());
     }
     @Test
@@ -17,12 +17,13 @@ public class PlayerTest {
     }
     @Test
     public void TestCurcol(){
-        assertEquals(0,b.players.peek().getCurrentColCell());
+        assertEquals(0,b.players.peek().getCurrentColumnCell());
     }
     @Test
     public void TestRollDice(){
+        Dice d = new Dice(6);
         for(int i = 0;i<1000;i++){
-            int r = b.players.peek().rollDice();
+            int r = b.players.peek().rollDice(d);
             assertTrue(r >= 1 && r <= 6);
         }
     }
