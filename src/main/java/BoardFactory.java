@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.Queue;
 
 public record BoardFactory() {
     public Board Board3Player() {
@@ -12,7 +11,7 @@ public record BoardFactory() {
         p2.setPosition(1);
         p3.setPosition(1);
 
-        Queue<Player> players = new LinkedList<>();
+        LinkedList<Player> players = new LinkedList<>();
         players.add(p1);
         players.add(p2);
         players.add(p3);

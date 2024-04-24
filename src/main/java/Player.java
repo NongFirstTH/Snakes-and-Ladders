@@ -20,13 +20,13 @@ public class Player {
         setPosition(position + face);
         Object currentCell;
 
-        if (board.cell[currentRowCell][currentColumnCell] == null) {
+        if (board.cells[currentRowCell][currentColumnCell] == null) {
             currentCell = null;
         } else {
-            currentCell = board.cell[currentRowCell][currentColumnCell];
+            currentCell = board.cells[currentRowCell][currentColumnCell];
         }
 
-        if (isPlayerAtFinishPosition()) {// TODO: จาก isFinish isPlayerAtFinishPosition?
+        if (isPlayerAtFinishPosition()) {// TODO: จาก isFinish -> isPlayerAtFinishPosition?
             int finishPosition = boardSize * boardSize;
             int positionToGo = finishPosition - (position - finishPosition);
 

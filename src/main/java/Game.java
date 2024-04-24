@@ -9,13 +9,14 @@ public class Game {
 
     public Game(Board board, Dice dice) {// TODO : เว้น spacebarก่อนปีกกา
         this.board = board;
-        this.boardSize = board.cell.length;
+        this.boardSize = board.cells.length;
         this.dice = dice;
     }
 
     public void play() {
+        Player player = board.players.peek();
+
         while (board.players.size() != 1) {
-            Player player = board.players.peek();
             int face = player.rollDice(dice);// TODO : เปลี่ยน roll เป็น face
 
             player.move(board, face);
@@ -23,15 +24,15 @@ public class Game {
             printBoard();
             printFooter(player);
             checkWinner();
-            changeTurn();
+            player = changeTurnFromCurrentPlayer(player);
         }
 
         printWinners();
     }
 
-    public void changeTurn() {
-        Player player = board.players.poll();
-        board.players.add(player);
+    public Player changeTurnFromCurrentPlayer(Player player) {
+        int indexOfNextPlayer = board.players.indexOf(player) + 1;
+        return board.players.get(indexOfNextPlayer % board.players.size());
     }
 
     public void checkWinner() {
@@ -101,15 +102,15 @@ public class Game {
                 String format = "%" + (-18) + "s";
 
                 if (!hasPlayerAtCell) {
-                    if (board.cell[rowCell][colCell] == null)
+                    if (board.cells[rowCell][colCell] == null)
                         System.out.printf(format, calculatePosition(rowCell, colCell));
                 } else {
                     System.out.printf(String.format(format, stringPlayer.toString()));
                 }
 
-                if (board.cell[rowCell][colCell] instanceof Ladder ladder) {
+                if (board.cells[rowCell][colCell] instanceof Ladder ladder) {
                     System.out.printf(format, "| " + ladder.name() + " |");
-                } else if (board.cell[rowCell][colCell] instanceof Snake snake) {
+                } else if (board.cells[rowCell][colCell] instanceof Snake snake) {
                     System.out.printf(format, '_' + snake.name() + '_');
                 }
 
