@@ -5,20 +5,20 @@ public class Game {
     public Board board;
     public Queue<Player> winners = new LinkedList<>();
     private int boardSize;
+    private int finishPosition;
     private Dice dice;
 
     public Game(Board board, Dice dice) {
         this.board = board;
         this.boardSize = board.cells.length;
+        this.finishPosition = boardSize * boardSize;
         this.dice = dice;
     }
 
     public void play() {
         Player player = board.players.peek();
 
-        //TODO : ไม่ต้องเอา Player ออกจาก board เกม ให้เช็คตอนเปลี่ยน turn แต่ละคน
-        //TODO : ใช่ชื่อให้ condition ใน while เป็น ?
-        while (board.players.size() != 1) {
+        while (isPlayerRemainOnBoard()) {
             int face = player.rollDice(dice);
 
             player.move(board, face);
@@ -32,6 +32,10 @@ public class Game {
         printWinners();
     }
 
+    private Boolean isPlayerRemainOnBoard() {
+        return board.players.size() != 1;
+    }
+
     public Player changeTurnFromCurrentPlayer(Player player) {
         int indexOfNextPlayer = board.players.indexOf(player) + 1;
 
@@ -39,10 +43,8 @@ public class Game {
     }
 
     public void checkWinner() {
-        int finishPosition = boardSize * boardSize;
-
         for (Player player : board.players) {
-            if (player.getPosition() == finishPosition) {
+            if (isPlayerAtFinishPosition(player)) {
                 winners.add(player);
                 board.players.remove(player);
                 return;
@@ -50,36 +52,55 @@ public class Game {
         }
     }
 
-    private int calculatePosition(int rowCell, int columnCell) {
+    private int calculatePosition(int rowCell, int columnCell, int allNumberOfCellAboveCurrentRowCell) {
         int position = 1;
-        int remainDigit = (boardSize - 1 - rowCell) * 10;
 
-        if (rowCell % 2 == 0) {
-            int unitDigit = boardSize - columnCell;
-
-            position = remainDigit + unitDigit;
+        if (isBoardSizeEven()) {
+            if (isRowOfCellEven(rowCell)) {
+                position = descendingOrderOfPosition(allNumberOfCellAboveCurrentRowCell, columnCell);
+            } else {
+                position = ascendingOrderOfPosition(allNumberOfCellAboveCurrentRowCell, columnCell);
+            }
         } else {
-            int unitDigit = columnCell + 1;
-
-            position = remainDigit + unitDigit;
+            if (isRowOfCellEven(rowCell)) {
+                position = ascendingOrderOfPosition(allNumberOfCellAboveCurrentRowCell, columnCell);
+            } else {
+                position = descendingOrderOfPosition(allNumberOfCellAboveCurrentRowCell, columnCell);
+            }
         }
 
-        return position;
+        return finishPosition - position;
+    }
+
+    private Boolean isPlayerAtFinishPosition(Player player) {
+        return player.getPosition() == finishPosition;
+    }
+    
+    private Boolean isBoardSizeEven() {
+        return boardSize % 2 == 0;
+    }
+
+    private Boolean isRowOfCellEven(int rowCell) {
+        return rowCell % 2 == 0;
+    }
+
+    private int descendingOrderOfPosition(int allNumberOfCellAboveCurrentRowCell, int columnCell) {
+        return allNumberOfCellAboveCurrentRowCell + columnCell;
+    }
+
+    private int ascendingOrderOfPosition(int allNumberOfCellAboveCurrentRowCell, int columnCell) {
+        return allNumberOfCellAboveCurrentRowCell - columnCell + boardSize - 1;
     }
 
     public void printHeader(Player player, int roll) {
         int dashWidth = ((boardSize - 1) * 18) + 1;
         int textTurnRollWidth = 14;
         int textAtMiddleWidth = dashWidth - textTurnRollWidth - player.getColor().length();
-        
-        //TODO : d -> D
-        int digitOfdice = (int) Math.log10(roll) + 1;
-        int headerWidth = (textAtMiddleWidth - digitOfdice) / 2;
-        
-        //TODO : H -> h
-        String Header = "|" + "-".repeat(headerWidth) + "%s" + "-".repeat(headerWidth) + "|";
+        int digitOfDice = (int) Math.log10(roll) + 1;
+        int headerWidth = (textAtMiddleWidth - digitOfDice) / 2;
+        String header = "|" + "-".repeat(headerWidth) + "%s" + "-".repeat(headerWidth) + "|";
 
-        System.out.printf(Header, player.getColor() + " turn: roll = " + roll);
+        System.out.printf(header, player.getColor() + " turn: roll = " + roll);
         System.out.println();
     }
 
@@ -97,6 +118,8 @@ public class Game {
 
     public void printBoard() {
         for (int rowCell = 0; rowCell < boardSize; rowCell++) {
+            int allNumberOfCellAboveCurrentRowCell = rowCell * boardSize;
+
             for (int columnCell = 0; columnCell < boardSize; columnCell++) {
                 StringBuilder stringPlayer = new StringBuilder();
                 boolean hasPlayerAtCell = false;
@@ -112,13 +135,13 @@ public class Game {
 
                 if (!hasPlayerAtCell) {
                     if (board.cells[rowCell][columnCell] == null)
-                        System.out.printf(format, calculatePosition(rowCell, columnCell));
+                        System.out.printf(format,calculatePosition(rowCell, columnCell, allNumberOfCellAboveCurrentRowCell));
                 } else {
                     System.out.printf(String.format(format, stringPlayer.toString()));
                 }
 
                 if (board.cells[rowCell][columnCell] instanceof Ladder ladder) {
-                    System.out.printf(format, "| " + ladder.name() + " |");
+                    System.out.printf(format, "|" + ladder.name() + "|");
                 } else if (board.cells[rowCell][columnCell] instanceof Snake snake) {
                     System.out.printf(format, '_' + snake.name() + '_');
                 }
@@ -132,13 +155,10 @@ public class Game {
         String format = "|%-10s|";
         int rank = 1;
 
-        //TODO : สร้างฟังก์ชันแยกตรง print repeat
-        System.out.print("-".repeat(12));
-        System.out.println();
+        repeatDash();
         System.out.printf(format, "Winner");
         System.out.println();
-        System.out.print("-".repeat(12));
-        System.out.println();
+        repeatDash();
 
         while (!winners.isEmpty()) {
             System.out.printf(format, rank++ + " " + winners.poll().getColor());
@@ -146,9 +166,11 @@ public class Game {
         }
 
         System.out.printf(format, rank + " " + board.players.poll().getColor());
+        System.out.println();
+        repeatDash();
+    }
 
-        System.out.println();
-        System.out.print("-".repeat(12));
-        System.out.println();
+    private void repeatDash() {
+        System.out.println("-".repeat(12));
     }
 }

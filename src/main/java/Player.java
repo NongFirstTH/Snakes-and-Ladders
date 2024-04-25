@@ -2,12 +2,14 @@ public class Player {
     private int position;
     private int currentRowCell;
     private int currentColumnCell;
-    private String color;
     private int boardSize;
+    private int finishPosition;
+    private String color;
 
     public Player(String color, int boardSize) {
         this.color = color;
         this.boardSize = boardSize;
+        this.finishPosition = boardSize * boardSize;
     }
 
     public void setPosition(int position) {
@@ -18,18 +20,9 @@ public class Player {
 
     public void move(Board board, int face) {
         setPosition(position + face);
-
-        //TODO : ประกาศตัวแปรโดยให้ค่าตั้งต้นเป็น board.cells[currentRowCell][currentColumnCell];
-        Object currentCell;
-
-        if (board.cells[currentRowCell][currentColumnCell] == null) {
-            currentCell = null;
-        } else {
-            currentCell = board.cells[currentRowCell][currentColumnCell];
-        }
+        Object currentCell = board.cells[currentRowCell][currentColumnCell];
 
         if (isPlayerAtFinishPosition()) {
-            int finishPosition = boardSize * boardSize;
             int positionToGo = finishPosition - (position - finishPosition);
 
             setPosition(positionToGo);
@@ -62,7 +55,7 @@ public class Player {
         int unitDigitOfPosition = position % boardSize;
 
         if (isPlayerAtFinishPosition()) {
-            if (boardSize % 2 == 0) {
+            if (isBoardSizeEven()) {
                 return 0;
             } else {
                 return boardSize - 1;
@@ -74,7 +67,7 @@ public class Player {
                 return boardSize - unitDigitOfPosition;
             }
         } else {
-            if (isFirstRow()) {
+            if (isPositionEqualFirstRow()) {
                 return position - 1;
             } else {
                 if (isPositionDividedByBoardsize()) {
@@ -86,19 +79,18 @@ public class Player {
         }
     }
 
-    //TODO : colCell -> columnCell
-    private int calculatePosition(int rowCell, int colCell) {
+    private int calculatePosition(int rowCell, int columnCell) {
         int position = 1;
-        int remainDigit = (boardSize - 1 - rowCell) * 10;
+        int remainDigitOfPosition = (boardSize - 1 - rowCell) * 10;
 
-        if (rowCell % 2 == 0) {
-            int unitDigit = boardSize - colCell;
+        if (isRowOfCellEven(rowCell)) {
+            int unitDigitOfPosition = boardSize - columnCell;
 
-            position = remainDigit + unitDigit;
+            position = remainDigitOfPosition + unitDigitOfPosition;
         } else {
-            int unitDigit = colCell + 1;
+            int unitDigitOfPosition = columnCell + 1;
 
-            position = remainDigit + unitDigit;
+            position = remainDigitOfPosition + unitDigitOfPosition;
         }
 
         return position;
@@ -124,11 +116,15 @@ public class Player {
         return dice.face();
     }
 
+    private Boolean isRowOfCellEven(int rowCell) {
+        return rowCell % 2 == 0;
+    }
+
+    private Boolean isBoardSizeEven() {
+        return boardSize % 2 == 0;
+    }
+
     private Boolean isPlayerAtFinishPosition() {
-
-        //TODO : คำนวณ boardSize * boardSize ก่อน แล้วค่อยเอามาใช้ 
-        int finishPosition = boardSize * boardSize;
-
         return position >= finishPosition;
     }
 
@@ -140,7 +136,7 @@ public class Player {
         return position % boardSize == 0;
     }
 
-    private Boolean isFirstRow() {
+    private Boolean isPositionEqualFirstRow() {
         return currentRowCell == boardSize - 1;
     }
 }

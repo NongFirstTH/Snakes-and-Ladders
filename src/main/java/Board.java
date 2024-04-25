@@ -7,9 +7,9 @@ public class Board {
     public LinkedList<Snake> snakes = new LinkedList<>();
 
     public Board(int boardSize, LinkedList<Player> players) {
-        this.cells = new Object[boardSize][boardSize];// TODO : เปลี่ยนชื่อเป็น cells
+        this.cells = new Object[boardSize][boardSize];
         this.players = players;
-        // TODO : ต้องเปลี่ยน boardSize ได้
+
         ladders.add(new Ladder("L1", new int[] { boardSize - 1, 1 }, new int[] { boardSize - 4, 1 }));
         ladders.add(new Ladder("L2", new int[] { boardSize - 1, 5 }, new int[] { boardSize - 2, 6 }));
         ladders.add(new Ladder("L3", new int[] { boardSize - 3, 7 }, new int[] { boardSize - 6, 7 }));
@@ -22,7 +22,7 @@ public class Board {
         snakes.add(new Snake("S4", new int[] { boardSize - 8, 7 }, new int[] { boardSize - 6, 6 }));
         snakes.add(new Snake("S5", new int[] { 0, 9 }, new int[] { boardSize - 5, 9 }));
         snakes.add(new Snake("S6", new int[] { 0, 2 }, new int[] { boardSize - 6, 4 }));
-        
+
         placeLadder();
         placeSnake();
     }

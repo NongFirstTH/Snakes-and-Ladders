@@ -3,7 +3,7 @@ import java.util.LinkedList;
 public record BoardFactory() {
     public Board Board3Player() {
         int boardSize = 10;
-        Player p1 = new Player("red", boardSize);// TODO:เว้นหลังลูกน้ำ
+        Player p1 = new Player("red", boardSize);
         Player p2 = new Player("blue", boardSize);
         Player p3 = new Player("green", boardSize);
 
